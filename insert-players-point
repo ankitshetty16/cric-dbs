@@ -1,0 +1,76 @@
+
+--player_roles
+INSERT INTO player_roles (name) VALUES ('batsman');
+INSERT INTO player_roles (name) VALUES ('bowler');
+INSERT INTO player_roles (name) VALUES ('all-rounder');
+
+select * from player_roles;
+
+--formats
+INSERT INTO formats (name) VALUES ('test');
+INSERT INTO formats (name) VALUES ('odi');
+INSERT INTO formats (name) VALUES ('t20');
+select * from formats;
+
+-- teams
+INSERT INTO teams (name,test_ranking,odi_ranking,t20_ranking) 
+	VALUES ('India','1','2','1');
+INSERT INTO teams (name,test_ranking,odi_ranking,t20_ranking) 
+	VALUES ('Australia','3','1','2');
+INSERT INTO teams (name,test_ranking,odi_ranking,t20_ranking) 
+	VALUES ('England','4','4','3');
+INSERT INTO teams (name,test_ranking,odi_ranking,t20_ranking) 
+	VALUES ('New Zealand','2','3','4');
+
+select * from teams;
+
+-- player_info
+INSERT INTO player_info (name,dob,role_id,team_id,batting_type,bowling_type)
+	VALUES ('MS Dhoni','1981-07-07',1,1,'Right Handed Bat','Right-arm medium');
+
+INSERT INTO player_info (name,dob,role_id,team_id,batting_type,bowling_type)
+	VALUES ('Steven Smith','1989-06-02',1,2,'Right Handed Bat','Right-arm legbreak');
+INSERT INTO player_info (name,dob,role_id,team_id,batting_type,bowling_type)
+	VALUES ('Joe Root','1990-12-30',1,3,'Right Handed Bat','Right-arm offbreak');
+INSERT INTO player_info (name,dob,role_id,team_id,batting_type,bowling_type)
+	VALUES ('Kane Williamson','1981-08-08',1,4,'Right Handed Bat','Right-arm offbreak');	
+	
+
+select * from player_info;
+
+--batting statistics
+select * from batting_statistics;
+
+INSERT INTO batting_statistics 
+(player_id,format_id,matches,innings,runs,balls_faced,strike_rate,average,ducks,"50s","100s","200s",highest_score,not_outs) 
+	VALUES (1,1,12,12,123,123,3.2,0.4,0,1,0,0,54,1);
+INSERT INTO batting_statistics 
+(player_id,format_id,matches,innings,runs,balls_faced,strike_rate,average,ducks,"50s","100s","200s",highest_score,not_outs) 
+	VALUES (1,1,2,132,123,123,3.2,0.4,0,1,0,0,534,1);
+INSERT INTO batting_statistics 
+(player_id,format_id,matches,innings,runs,balls_faced,strike_rate,average,ducks,"50s","100s","200s",highest_score,not_outs) 
+	VALUES (1,1,12,512,123,123,3.2,0.4,0,1,0,0,534,1);
+INSERT INTO batting_statistics 
+(player_id,format_id,matches,innings,runs,balls_faced,strike_rate,average,ducks,"50s","100s","200s",highest_score,not_outs) 
+	VALUES (1,1,12,162,123,123,3.2,0.4,0,1,0,0,534,1);	
+	
+-- bowling statistics
+select * from bowling_statistics;
+	
+INSERT into bowling_statistics
+(player_id,format_id,matches,innings,balls,economy,average,maidens,wickets,"4_wicket","5_wicket")
+-- 	VALUES (1,1,12,142,123,3.2,0.4,0,1,,0);
+-- 	VALUES (2,1,12,32,123,3.2,0.4,0,2,0,0);
+-- 	VALUES (3,1,12,12,123,3.2,0.4,0,1,1,0);
+	VALUES (4,1,12,162,123,3.2,0.4,0,1,1,0);
+	
+-- player_rankings
+select * from player_rankings;
+INSERT into player_rankings
+(player_id,format_id,role_id,ranking)
+-- 	VALUES(1,2,1,4);
+-- 	VALUES(2,1,1,3);
+-- 	VALUES(3,3,1,2);
+	VALUES(4,3,1,1);
+	
+	

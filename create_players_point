@@ -1,0 +1,99 @@
+-- Database: players-point
+
+DROP DATABASE IF EXISTS "players-point";
+
+CREATE DATABASE "players-point"
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'C'
+    LC_CTYPE = 'C'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+	
+CREATE TABLE player_roles (
+	id serial PRIMARY KEY,
+	name varchar(20) UNIQUE NOT NULL
+);
+
+CREATE TABLE formats (
+	id serial PRIMARY KEY,
+	name varchar(20) UNIQUE NOT NULL
+);
+
+CREATE TABLE teams (
+	id serial PRIMARY KEY,
+	name varchar(20) UNIQUE NOT NULL,
+	test_ranking int NOT NULL,
+	odi_ranking int NOT NULL,
+	t20_ranking int NOT NULL
+);
+
+CREATE TABLE player_info (
+	id serial PRIMARY KEY,
+	name varchar(50) NOT NULL,
+	dob date NOT NULL,
+	role_id int NOT NULL,
+	team_id int NOT NULL,
+	batting_type varchar(20) NOT NULL,
+	bowling_type varchar(20) DEFAULT NULL,
+	FOREIGN KEY (role_id)
+		  REFERENCES player_roles (id),
+	FOREIGN KEY (team_id)
+		  REFERENCES teams (id)	
+);
+
+CREATE TABLE batting_statistics (
+	id serial PRIMARY KEY,
+	player_id int NOT NULL,
+	format_id int NOT NULL,
+	matches int NOT NULL,
+	innings int NOT NULL,
+	runs int NOT NULL,
+	balls_faced int NOT NULL,
+	strike_rate numeric(3,2) NOT NULL,
+	average numeric(3,3) NOT NULL,
+	ducks int NOT NULL,
+	"50s" int NOT NULL,
+	"100s" int NOT NULL,
+	"200s" int NOT NULL,
+	highest_score int NOT NULL,
+	not_outs int NOT NULL,	
+	FOREIGN KEY (player_id)
+		  REFERENCES player_info (id),
+	FOREIGN KEY (format_id)
+		  REFERENCES formats (id)		  
+);
+
+CREATE TABLE bowling_statistics (
+	id serial PRIMARY KEY,
+	player_id int NOT NULL,
+	format_id int NOT NULL,
+	matches int NOT NULL,
+	innings int NOT NULL,	
+	balls int NOT NULL,
+	economy numeric(3,2) NOT NULL,
+	average numeric(3,3) NOT NULL,
+	maidens int NOT NULL,
+	wickets int NOT NULL,
+	"4_wicket" int NOT NULL,
+	"5_wicket" int NOT NULL,
+	FOREIGN KEY (player_id)
+		  REFERENCES player_info (id),
+	FOREIGN KEY (format_id)
+		  REFERENCES formats (id)			  
+);
+
+CREATE TABLE player_rankings (
+	id serial PRIMARY KEY,
+	player_id int NOT NULL,
+	format_id int NOT NULL,
+	role_id int NOT NULL,
+	ranking int NOT NULL,
+	FOREIGN KEY (player_id)
+		  REFERENCES player_info (id),
+	FOREIGN KEY (format_id)
+		  REFERENCES formats (id),
+	FOREIGN KEY (role_id)
+		  REFERENCES player_roles (id)		  
+);
