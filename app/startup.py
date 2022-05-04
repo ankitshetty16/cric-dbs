@@ -62,8 +62,29 @@ class register(Resource):
             print("An exception has occured")
             return 404
 
+class filterInfo(Resource):
+    def get(self):
+        cur = conn.cursor()
+        role_query = "select name from player_roles"
+        cur.execute(role_query)
+        roles = cur.fetchall()
+        res = {}
+        role_list = []
+        for role in roles:
+            role_list.append(role[0])
+        res['roles'] = role_list
+        team_query = "select name from teams"
+        cur.execute(team_query)
+        teams = cur.fetchall()
+        team_list = []
+        for team in teams:
+            team_list.append(team[0])
+        res['teams'] = team_list
+        return res,200
+
 def start_endpoint():
     api.add_resource(register,'/register')
+    api.add_resource(filterInfo,'/filterInfo')
     app.run(host="0.0.0.0", port="80",debug=True)
 
 def test_db():
