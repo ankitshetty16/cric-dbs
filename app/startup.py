@@ -136,7 +136,7 @@ def getBattingStats(id):
     cur.execute(player_query,(id),)
     players = cur.fetchall()
     cur.close()
-    if player is None:
+    if players is None:
         return {}
     result = {}
     #data = []
