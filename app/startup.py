@@ -122,6 +122,7 @@ def getPlayerInfo(id):
     if player is None:
         return {}
     res = {}
+    res['id'] = int(player[0])
     res['name'] = str(player[1])
     res['dob'] = str(player[2])
     res['role'] = get_roleId(int(player[3]))
@@ -139,6 +140,7 @@ def getBattingStats(id):
     if players is None:
         return {}
     result = {}
+    update_format = {'test' : 0, 'odi': 0, 't20' :0}
     #data = []
     for player in players:
         res = {}
@@ -157,6 +159,29 @@ def getBattingStats(id):
         res['highest_score'] = int(player[13])
         res['not_outs'] = int(player[14])
         result[res['format']] = res
+        update_format[res['format']] = 1
+    emptyRes = {}
+    emptyRes['id'] = None
+    emptyRes['format'] = None
+    emptyRes['matches'] = None
+    emptyRes['innings'] = None
+    emptyRes['runs'] = None
+    emptyRes['balls_faced'] = None
+    emptyRes['strike_rate'] = None
+    emptyRes['average'] = None
+    emptyRes['ducks'] = None
+    emptyRes['50s'] = None
+    emptyRes['100s'] = None
+    emptyRes['200s'] = None
+    emptyRes['highest_score'] = None
+    emptyRes['not_outs'] = None
+    if update_format['test'] == 0:
+        result['test'] = emptyRes
+    if update_format['odi'] == 0:
+        result['odi'] = emptyRes
+    if update_format['t20'] == 0:
+        result['t20'] = emptyRes
+
     return result
 
 
@@ -200,11 +225,17 @@ class getPlayer(Resource):
         res['bowling_stats'] = bowling_stats
         return res,200
 
+class updateBatStats(Resource):
+    def post(self):
+        cur = conn.cursor()
+        data = json.loads(request.get_data())
+
 def start_endpoint():
     api.add_resource(register,'/register')
     api.add_resource(filterInfo,'/filterInfo')
     api.add_resource(getFormats,'/getFormats')
     api.add_resource(getPlayer,'/getPlayer')
+    api.add_resource(updateBatStats,'/updateBat')
     app.run(host="0.0.0.0", port="80",debug=True)
 
 def test_db():
