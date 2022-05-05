@@ -1,0 +1,246 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style-type:none;
+    font-family: Impact, fantasy;
+}
+header {
+    height:60px;
+    width:100%;
+    position:fixed;
+    background:#6a5acd;
+    z-index:120;
+}
+header li {
+    float: right;
+    list-style-type:none;
+    border-right: 2px solid #FFFFFF;
+}
+header li a {
+    float: right;
+    width: 98px;
+    height: 12px;
+    padding: 24px 17px;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font: normal 100.5% Impact, fantasy;
+}
+header .logo{
+    width: 13%;
+    float: left;
+    padding: 11px 0px 0px 30px;
+}
+.site-content{
+    position:absolute;
+    margin-top: 90px;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.main-container{
+    color: #17252a;
+    margin:0;
+    width: 100%;
+}
+.container{
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 30px 10px 30px;
+}
+.search-window{
+    border: 2px solid #170e52;
+    border-radius: 5px;
+    margin: 30px;
+    padding: 30px;
+    text-align: center;
+}
+footer {
+    position:fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #6a5acd;
+    z-index:120;
+    color: white;
+    text-align: center;
+}
+
+button {
+    margin: 35px 0px 10px 0px;
+    padding: 0.8em 1.8em;
+    border: 2px solid #242124;
+    position: relative;
+    overflow: hidden;
+    background-color: transparent;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 16px;
+    transition: .3s;
+    z-index: 1;
+    font-family: inherit;
+    color: #242124;
+}
+
+button::before {
+    content: '';
+    width: 0;
+    height: 300%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background: #242124;
+    transition: .5s ease;
+    display: block;
+    z-index: -1;
+}
+
+button:hover::before {
+    cursor: pointer;
+    width: 105%;
+}
+
+button:hover {
+    cursor: pointer;
+    color: #FFFFFF;
+}
+
+button:disabled,
+button[disabled]{
+    color: #FFFFFF;
+    background: #242124;
+} 
+
+/* CSS for register screen */
+.heading {
+    font-size: 50px;             
+    font-weight: 500;
+}   
+.padding-top {
+    padding-top: 50px;
+}
+.register-container {
+    min-height: 600px;
+    padding: 100px 450px;
+    width: 50%;
+}
+
+.register-card {
+    margin: 0px 70px 0px 90px;
+    border-radius: 25px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 1);
+    background:#242124;;
+    color: #FFFFFF;
+    padding: 0px 0px 0px 110px;
+}
+.register-head{
+    color: #6a5acd;
+}
+
+.input-container {
+    height: 50px;
+    position: relative;
+    width: 100%;
+}
+.ic1 {
+    margin-top: 40px;
+}
+
+.ic2 {
+    margin-top: 30px;
+}
+
+.input {
+    border-radius: 12px;
+    border: 0;
+    box-sizing: border-box;
+    color: #000000;
+    font-size: 18px;
+    height: 100%;
+    outline: 0;
+    padding: 4px 20px 0;
+    width: 82%;
+}
+
+.cut {
+    background-color: #242124;
+    border-radius: 10px;
+    height: 20px;
+    left: 20px;
+    position: absolute;
+    top: -20px;
+    transform: translateY(0);
+    transition: transform 200ms;
+    width: 76px;
+}
+
+.cut-short {
+    width: 50px;
+}
+
+.cut-long {
+    width: 100px;
+}
+.cut-long-xl {
+    width: 180px;
+}
+.input:focus ~ .cut,
+.input:not(:placeholder-shown) ~ .cut {
+    transform: translateY(8px);
+}
+
+.placeholder {
+    color: #949494;
+    letter-spacing: 0.1rem;
+    left: 20px;
+    line-height: 14px;
+    pointer-events: none;
+    position: absolute;
+    transform-origin: 0 50%;
+    transition: transform 200ms, color 200ms;
+    top: 20px;
+}
+
+.input:focus ~ .placeholder,
+.input:not(:placeholder-shown) ~ .placeholder {
+    transform: translateY(-30px) translateX(10px) scale(0.75);
+}
+
+.input:not(:placeholder-shown) ~ .placeholder {
+    color: #808097;
+}
+
+.input:focus ~ .placeholder {
+    color: #7d73be;
+}
+
+.submit {
+    background-color: #6a5acd;
+    border-radius: 12px;
+    border: 0;
+    box-sizing: border-box;
+    color: #eee;
+    cursor: pointer;
+    font-size: 18px;
+    height: 50px;
+    margin-top: 38px;
+    margin-bottom: 30px;
+    text-align: center;
+    width: 82%;
+}
+
+.submit::before {
+    width: 0;
+    height: 1000%;
+    position: absolute;
+    top: 100%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background: #372897;
+    transition: .5s ease;
+    display: block;
+    z-index: -1;
+}

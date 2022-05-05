@@ -1,1 +1,236 @@
-<p>TESTING WORKS!!</p>
+<!DOCTYPE html>
+<html style="font-size: 16px;">
+    <head>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <link rel="icon" type="image/png" sizes="32x32" href="{{url_for('static',filename='image/favicon.ico')}}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>   
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>   
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"></script>   
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">  
+    </head>
+    <body>
+        <main>
+            <header>
+                <a href="/"><img class="logo" src="{{url_for('static',filename='image/logo.png')}}"></a>
+                <div class="nav">
+                <ul>
+                    <li><a href="?view=register">Register</a></li>
+                </ul>
+                </div>                                
+            </header>
+            <div class="site-content">
+                    <div id="home" class="main-container">
+                        <div class="container search-window">
+                            'here'
+                        </div>
+                        <div class="container">
+                            <table id="example" class="display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Position</th>
+                                        <th>Office</th>
+                                        <th>Age</th>
+                                        <th>Start date</th>
+                                        <th>Salary</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Tiger Nixon</td>
+                                        <td>System Architect</td>
+                                        <td>Edinburgh</td>
+                                        <td>61</td>
+                                        <td>2011/04/25</td>
+                                        <td>$320,800</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Garrett Winters</td>
+                                        <td>Accountant</td>
+                                        <td>Tokyo</td>
+                                        <td>63</td>
+                                        <td>2011/07/25</td>
+                                        <td>$170,750</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ashton Cox</td>
+                                        <td>Junior Technical Author</td>
+                                        <td>San Francisco</td>
+                                        <td>66</td>
+                                        <td>2009/01/12</td>
+                                        <td>$86,000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cedric Kelly</td>
+                                        <td>Senior Javascript Developer</td>
+                                        <td>Edinburgh</td>
+                                        <td>22</td>
+                                        <td>2012/03/29</td>
+                                        <td>$433,060</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Airi Satou</td>
+                                        <td>Accountant</td>
+                                        <td>Tokyo</td>
+                                        <td>33</td>
+                                        <td>2008/11/28</td>
+                                        <td>$162,700</td>
+                                    </tr>                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>                        
+                    </div>
+                <div id="player-detail">
+                    player detail information
+                </div>
+                <div id="register">
+                    <div class="main-container">
+                        <div class="container register-container">
+                            <div class="register-card">
+                                <p class="heading padding-top register-head">Player Registration</p>
+                                    <div id="register-form" class="form">
+                                        <div class="input-container ic1">
+                                          <input id="player-name" class="input" type="text" placeholder=" "  required/>
+                                          <div class="cut cut-long"></div>
+                                          <label for="name" class="placeholder">Player Name</label>
+                                        </div>
+                                        <div class="input-container ic2">
+                                            <input id="player-dob" class="input" type="date" placeholder=" " max="2022-05-05" required/>
+                                            <div class="cut cut-long-xl"></div>
+                                            <label for="name" class="placeholder">Date of Birth</label>
+                                        </div>
+                                        <div class="input-container ic2">
+                                            <select id="player-role" name="type" class = "input" required>
+                                                <option value="" disabled selected>Select Role</option>
+                                            </select>
+                                            <div class="cut cut-long"></div>
+                                            <label for="type" class="placeholder">Player Role</label>
+                                        </div>
+                                        <div class="input-container ic2">
+                                            <select id="player-team" name="type" class = "input" required>
+                                                <option value="" disabled selected>Select Team</option>
+                                            </select>
+                                            <div class="cut cut-long"></div>
+                                            <label for="type" class="placeholder">Player Team</label>
+                                        </div>
+                                        <div class="input-container ic2">
+                                            <select id="player-batType" name="type" class = "input">
+                                                <option value="" disabled selected>Select Batting Type</option>                                     
+                                            </select>
+                                            <div class="cut cut-long"></div>
+                                            <label for="type" class="placeholder">Batting Type</label>                                          
+                                        </div>
+                                        <div class="input-container ic2">
+                                            <select id="player-bowlType" name="type" class = "input">
+                                                <option value="" disabled selected>Select Bowling Type</option>
+                                            </select>
+                                            <div class="cut cut-long"></div>
+                                            <label for="type" class="placeholder">Bowling Type</label>
+                                        </div>                                                                                
+                                        <button id="register-button" type="submit" class="submit" onclick="registerPlayer()">Register</button>
+                                    </div>
+                            </div>                           
+                        </div>                       
+                    </div>
+                </div> 
+            </div> 
+            <footer>
+                <p>[Developed and maintained by Team Heathers©] </p>
+            </footer>                      
+        </main>
+        <script>
+            // var bowlPlayType = ["Right Handed Medium Fast","Right Handed Chinaman","Right Handed Leg Spin","Right Handed Off Spin","Left Handed Medium Fast","Left Handed Chinaman","Left Handed Leg Spin","Left Handed Off Spin"];
+            var bowlPlayType = ["Right Handed Batsman","Left Handed Batsman"];
+            var batPlayType = ["Right Handed Batsman","Left Handed Batsman"];
+            var viewTypes = ['home','player-detail','register'];
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            const params = Object.fromEntries(urlSearchParams.entries());            
+            var view = params.view != undefined ? params.view : 'home';
+
+            var roles = [];
+            var teams = [];
+            
+            loadInit();
+
+            /**
+             * Initialise app load requirements
+             */
+            function loadInit(){
+                toggleView();
+                $.get("/filterInfo", function(res){
+                    populateDropdown(res.roles,'player-role');
+                    populateDropdown(res.teams,'player-team');
+                    populateDropdown(batPlayType,'player-batType');
+                    populateDropdown(bowlPlayType,'player-bowlType');
+                });
+                if (view == 'home'){
+                    prepareTable();
+                }       
+            }
+
+            /**
+             * Function to toggle view based on URL
+             */
+             function toggleView(){
+                viewTypes.forEach(type => {
+                    if (type == view) {
+                        document.getElementById(type).style.display = 'block';
+                    }else{
+                        document.getElementById(type).style.display = 'none';
+                    }
+                });
+            }            
+            
+            /**
+             * Function to prefill dropdowns
+             */
+            function populateDropdown(list,elementId){
+                var selectElement = document.getElementById(elementId);
+                list.forEach(opt =>{
+                    newElement = document.createElement('option');
+                    newElement.textContent = opt;
+                    newElement.value = opt;
+                    selectElement.appendChild(newElement);
+                });
+            }
+
+            /**
+             * Function to register a new player in the system
+             */
+            function registerPlayer(event){
+                fields = ["player-name","player-dob","player-role","player-team","player-batType","player-bowlType"];
+                fieldValues = getFieldValues(fields,"player-");
+                fieldValues['dob'] = fieldValues['dob'].replace(/-/g,'/');
+
+                $.post("/register",JSON.stringify(fieldValues), function(res){
+                    if (res == 404){
+                        alert("Please check the fields again. One or more have some issues in them");
+                    }else{
+                        alert("Player "+fieldValues['name']+" registered succesfully");
+                        document.location.reload();
+                    }
+                });
+            }
+
+            /**
+             * Function to get field values
+             */
+            function getFieldValues(list,type) {
+                var values = {};
+                list.forEach(id=>{
+                    key = id.split(type)[1];
+                    values[key] = document.getElementById(id).value;
+                });
+
+                return values;
+            }
+
+            function prepareTable(){
+                console.log('table loaded');
+                $('#example').DataTable();
+            }
+        </script>
+    </body>
+</html>

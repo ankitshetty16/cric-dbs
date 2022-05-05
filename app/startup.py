@@ -49,7 +49,7 @@ class register(Resource):
     def post(self):
         try:
             cur = conn.cursor()
-            data = request.get_json()
+            data = json.loads(request.get_data());
             player_name = data['name']
             player_dob = datetime.datetime.strptime(data['dob'] , '%Y/%m/%d').date()
             role = data['role']
