@@ -45,6 +45,14 @@ def getFormat(format_id):
     cur.close()
     return formt
 
+def getFormatId(format):
+    cur = conn.cursor()
+    roleIdQuery = "select id from formats where name = %s"
+    cur.execute(roleIdQuery,(format,))
+    formt = int(cur.fetchone()[0])
+    cur.close()
+    return formt
+
 class register(Resource):
     def post(self):
         try:
@@ -92,11 +100,19 @@ class filterInfo(Resource):
         team_query = "select name from teams"
         cur.execute(team_query)
         teams = cur.fetchall()
-        cur.close()
+        #cur.close()
         team_list = []
         for team in teams:
             team_list.append(team[0])
         res['teams'] = team_list
+        format_query = "select name from formats"
+        cur.execute(format_query)
+        formats = cur.fetchall()
+        cur.close()
+        format_list = []
+        for format in formats:
+            format_list.append(format[0])
+        res['formats'] = format_list
         return res,200
 
 class getFormats(Resource):
@@ -110,7 +126,7 @@ class getFormats(Resource):
         format_list = []
         for format in roles:
             format_list.append(format[0])
-        res['roles'] = format_list
+        res['formats'] = format_list
         return res,200
 
 def getPlayerInfo(id):
@@ -225,17 +241,80 @@ class getPlayer(Resource):
         res['bowling_stats'] = bowling_stats
         return res,200
 
-class updateBatStats(Resource):
+def updatePlayerInfo(player_data):
+    cur = conn.cursor()
+    data = player_data['player_info']
+    player_id = data['id']
+    player_name = data['name']
+    player_dob = datetime.datetime.strptime(data['dob'] , '%Y-%m-%d').date()
+    role = data['role']
+    team = data['team']
+    bat_type = data['batting_type']
+    bowl_type = None
+    if 'bowling_type' in data:
+        bowl_type = data['bowling_type']
+    # role_id = get_roleId(role)
+    roleIdQuery = "select id from player_roles where name = %s"
+    cur.execute(roleIdQuery,(role,))
+    role_id = int(cur.fetchone()[0])
+    teamIdQuery = "select id from teams where name = %s"
+    cur.execute(teamIdQuery,(team,))
+    teamId = cur.fetchone()[0]
+    insertQuery = "Update player_info set name = %s, dob = %s, role_id = %s, team_id = %s, batting_type = %s, bowling_type = %s where id = %s;"
+    cur.execute(insertQuery,(player_name,player_dob,role_id,teamId,bat_type,bowl_type,player_id))
+    conn.commit()
+    cur.close()
+
+def updateBattingStats(bat_data):
+    cur = conn.cursor()
+    req = bat_data['batting_stats']
+    formats = ['test','odi','t20']
+    for f in formats:
+        if req[f] != {}:
+            res= req[f]
+            player_id = res['id']
+            if player_id is None:
+                continue
+            format_id = getFormatId(res['format'])
+            matches = res['matches']
+            innings = res['innings']
+            runs = res['runs']
+            balls_faced = res['balls_faced']
+            strike_rate = res['strike_rate']
+            average = res['average']
+            ducks = res['ducks']
+            s50s = res['50s']
+            s100s = res['100s']
+            s200s = res['200s']
+            highest_score = res['highest_score']
+            notouts= res['not_outs']
+            # insertQuery = "Update batting_statistics set matches = %s, innings = %s, runs = %s, balls_faced = %s, strike_rate = %s, average = %s, ducks = %s, 50s = %s,100s = %s,200s = %s,highest_score = %s,notouts = %s where id = %s and format_id = %s;"
+            # cur.execute(insertQuery,(matches,innings,runs,balls_faced,strike_rate,average,ducks,s50s, s100s, s200s, highest_score,notouts, player_id,format_id))
+            insertQuery = "Update batting_statistics set matches = %s, innings = %s, runs = %s, balls_faced = %s, strike_rate = %s, average = %s, ducks = %s, highest_score = %s,not_outs = %s where player_id = %s and format_id = %s;"
+            cur.execute(insertQuery,(matches,innings,runs,balls_faced,strike_rate,average,ducks, highest_score,notouts, player_id,format_id))
+            conn.commit()
+    conn.close()
+    
+
+class updatePlayer(Resource):
     def post(self):
-        cur = conn.cursor()
-        data = json.loads(request.get_data())
+        # try:
+            cur = conn.cursor()
+            data = json.loads(request.get_data())
+            if 'player_info' in data:
+                updatePlayerInfo(data)
+            if 'batting_stats' in data:
+                updateBattingStats(data)
+            return {"status_code": 200, "msg" : "successfully updated"}, 200
+        # except:
+        #     return {"status_code": 404, "msg" : "exception has occurred"}, 404
 
 def start_endpoint():
     api.add_resource(register,'/register')
     api.add_resource(filterInfo,'/filterInfo')
     api.add_resource(getFormats,'/getFormats')
     api.add_resource(getPlayer,'/getPlayer')
-    api.add_resource(updateBatStats,'/updateBat')
+    api.add_resource(updatePlayer,'/updatePlayer')
     app.run(host="0.0.0.0", port="80",debug=True)
 
 def test_db():
