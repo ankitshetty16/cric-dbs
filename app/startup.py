@@ -148,8 +148,8 @@ def getBattingStats(id):
         res['innings'] = int(player[4])
         res['runs'] = int(player[5])
         res['balls_faced'] = int(player[6])
-        res['strike_rate'] = int(player[7])
-        res['average'] = int(player[8])
+        res['strike_rate'] = float(player[7])
+        res['average'] = float(player[8])
         res['ducks'] = int(player[9])
         res['50s'] = int(player[10])
         res['100s'] = int(player[11])
@@ -159,14 +159,45 @@ def getBattingStats(id):
         result[res['format']] = res
     return result
 
+
+def getBowlingStats(id):
+    cur = conn.cursor()
+    player_query = "select * from bowling_statistics where player_id = %s"
+    cur.execute(player_query,(id),)
+    players = cur.fetchall()
+    cur.close()
+    if players is None:
+        return {}
+    result = {}
+    #data = []
+    for player in players:
+        res = {}
+        res['id'] = int(player[1])
+        res['format'] = getFormat(int(player[2]))
+        res['matches'] = int(player[3])
+        res['innings'] = int(player[4])
+        res['balls'] = int(player[5])
+        res['economy'] = float(player[6])
+        res['average'] = float(player[7])
+        res['maidens'] = int(player[8])
+        res['wickets'] = int(player[9])
+        res['4_wicket'] = int(player[10])
+        res['5_wicket'] = int(player[11])
+        result[res['format']] = res
+    return result
+
 class getPlayer(Resource):
     def get(self):
         player_id = request.args.get('id')
         player_info = getPlayerInfo(player_id)
+        if player_info == {}:
+            return {"msg":"record not found", "status_code": 400},400
         res = {}
         res['player_info'] = player_info
         batting_stats = getBattingStats(player_id)
         res['batting_stats'] = batting_stats
+        bowling_stats = getBowlingStats(player_id)
+        res['bowling_stats'] = bowling_stats
         return res,200
 
 def start_endpoint():
