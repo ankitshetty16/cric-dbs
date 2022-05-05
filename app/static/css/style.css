@@ -14,7 +14,6 @@ header {
 header li {
     float: right;
     list-style-type:none;
-    border-right: 2px solid #FFFFFF;
 }
 header li a {
     float: right;
@@ -40,7 +39,11 @@ header .logo{
     overflow-x: hidden;
     width: 100%;
 }
-
+.box-6{
+    flex: 0 0 45%;
+    max-width: 45%;
+    padding: 40px;
+}
 .main-container{
     color: #17252a;
     margin:0;
@@ -50,6 +53,25 @@ header .logo{
     align-items: center;
     justify-content: space-between;
     padding: 40px 30px 10px 30px;
+}
+.detail-top{
+    display: flex;
+    flex-wrap: wrap;    
+}
+.detail-head{
+    width: 94%;
+}
+.split-view{
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 25px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 1);
+    border: 2px solid #170e52;
+    border-radius: 5px;      
+    padding: 30px;
+}
+.split-border{
+    border-right: 2px solid #6a5acd;
 }
 .search-window{
     border: 2px solid #170e52;
@@ -114,19 +136,43 @@ button[disabled]{
     color: #FFFFFF;
     background: #242124;
 } 
-
+.edit-button{
+    float:right;
+}
 /* CSS for register screen */
 .heading {
     font-size: 50px;             
     font-weight: 500;
-}   
+}
+.heading-3 {
+    font-size: 30px;             
+    font-weight: 400;
+}
+.heading-4{
+    font-size: 23px;
+    font-weight: 200;
+}
+.detail-display{
+    padding: 0px 0px 40px 25px;
+}
+.detail-col{
+    padding: 0px 0px 20px 20px;
+}
 .padding-top {
     padding-top: 50px;
 }
+.padding-bottom {
+    padding-bottom: 50px;
+}  
 .register-container {
     min-height: 600px;
     padding: 100px 450px;
     width: 50%;
+}
+.detail-container {
+    min-height: 600px;
+    padding: 100px 200px 0px 100px;
+    width: 90%;
 }
 
 .register-card {
@@ -243,4 +289,10 @@ button[disabled]{
     transition: .5s ease;
     display: block;
     z-index: -1;
+}
+
+/* Player details section css */
+.just-wrap{
+    display: flex;
+    width: fit-content;
 }

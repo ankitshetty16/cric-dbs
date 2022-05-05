@@ -6,8 +6,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.js"></script>   
         <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>   
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"></script>   
-        <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">  
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css"/>
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}" />
     </head>
     <body>
         <main>
@@ -83,7 +83,48 @@
                     </div>                        
                     </div>
                 <div id="player-detail">
-                    player detail information
+                    <div class="main-container">
+                        <div class="container detail-container">
+                            <div class="detail-top">
+                                <p class="heading padding-top register-head detail-head">Player Details</p>
+                                <button id="edit-button" class="edit-button">Edit</button>
+                            </div>
+                            <p class="heading-3 register-head padding-top padding-bottom">Player Information</p>
+                            <div id="basic-detail" class="just-wrap"></div>
+                            <div class="split-view">
+                                <div class="box-6 split-border">
+                                    <p class="heading-3 register-head padding-bottom">Batting Statistics</p>
+                                    <div id="bat-detail">
+                                        <div id="bat-odi">
+                                            <p class="heading-4 register-head padding-bottom">ODIs</p>
+                                        </div>
+                                        <div id="bat-t20">
+                                            <p class="heading-4 register-head padding-top padding-bottom">T20s</p>
+                                        </div>
+                                        <div id="bat-test">
+                                            <p class="heading-4 register-head padding-top padding-bottom">Tests</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="box-6">
+                                    <p class="heading-3 register-head padding-bottom">Bowling Statistics</p>
+                                    <div id="bowl-detail">
+                                        <div id="bowl-odi">
+                                            <p class="heading-4 register-head padding-bottom">ODIs</p>
+                                        </div>
+                                        <div id="bowl-t20">
+                                            <p class="heading-4 register-head padding-top padding-bottom">T20s</p>
+                                        </div>
+                                        <div id="bowl-test">
+                                            <p class="heading-4 register-head padding-top padding-bottom">Tests</p>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>                            
+                        </div>
+                    </div>
                 </div>
                 <div id="register">
                     <div class="main-container">
@@ -167,7 +208,10 @@
                 });
                 if (view == 'home'){
                     prepareTable();
-                }       
+                }else if(view == 'player-detail'){
+                    var id = params.id != undefined ? params.id : 0;
+                    populatePlayerInfo(id);
+                }   
             }
 
             /**
@@ -225,6 +269,48 @@
                 });
 
                 return values;
+            }
+
+            /**
+             * Function to get and display player information
+             */
+            function populatePlayerInfo(id){
+                $.get("/getPlayer?id="+id, function(res){
+                    if (res == 404){
+                        alert("There is some issue in loading this page. Please check the player ID and try again");
+                    }else{
+                        buildSection(res['player_info'],'basic-detail','detail-display');
+                        buildSection(res['batting_stats']['odi'],'bat-odi','detail-col');
+                        buildSection(res['batting_stats']['t20'],'bat-t20','detail-col');
+                        buildSection(res['batting_stats']['test'],'bat-test','detail-col');
+                        buildSection(res['bowling_stats']['odi'],'bowl-odi','detail-col');
+                        buildSection(res['bowling_stats']['t20'],'bowl-t20','detail-col');
+                        buildSection(res['bowling_stats']['test'],'bowl-test','detail-col');                        
+                    }
+                });
+            }
+
+            /**
+             * Function to build a section
+             */
+            function buildSection(info,id,xtraClass="") {
+                var element = document.getElementById(id);
+                if (info == undefined){
+                    newElement = document.createElement('p');
+                    newElement.innerHTML = "No records exist";
+                    newElement.className = "heading-4 "+xtraClass;
+                    element.appendChild(newElement);
+                    return;
+                }
+                for (const key in info) {
+                    label = key.charAt(0).toUpperCase() + key.slice(1);
+                    value = typeof(info[key]) == 'string'? info[key].charAt(0).toUpperCase() + info[key].slice(1) : info[key];
+
+                    newElement = document.createElement('p');
+                    newElement.innerHTML = label+": "+value;
+                    newElement.className = "heading-4 "+xtraClass;
+                    element.appendChild(newElement);
+                };
             }
 
             function prepareTable(){
