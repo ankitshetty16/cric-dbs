@@ -22,62 +22,14 @@
             <div class="site-content">
                     <div id="home" class="main-container">
                         <div class="container search-window">
-                            'here'
+                            <p class="heading-3 register-head padding-bottom">Player Filters</p>
+                            <div id="home-filters" class="search-filters just-wrap"></div>
+                            <div id="filter-button"></div>
                         </div>
                         <div class="container">
-                            <table id="example" class="display" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Tiger Nixon</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011/04/25</td>
-                                        <td>$320,800</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Garrett Winters</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>63</td>
-                                        <td>2011/07/25</td>
-                                        <td>$170,750</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Ashton Cox</td>
-                                        <td>Junior Technical Author</td>
-                                        <td>San Francisco</td>
-                                        <td>66</td>
-                                        <td>2009/01/12</td>
-                                        <td>$86,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Cedric Kelly</td>
-                                        <td>Senior Javascript Developer</td>
-                                        <td>Edinburgh</td>
-                                        <td>22</td>
-                                        <td>2012/03/29</td>
-                                        <td>$433,060</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Airi Satou</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>33</td>
-                                        <td>2008/11/28</td>
-                                        <td>$162,700</td>
-                                    </tr>                                
-                                </tbody>
+                            <table id="players-table" class="display" style="width:100%">
+                                <thead id="players-head"></thead>
+                                <tbody id="players-body"></tbody>
                             </table>
                         </div>
                     </div>                        
@@ -232,9 +184,8 @@
             </footer>                      
         </main>
         <script>
-            var bowlPlayType = ["Right Handed Medium Fast","Right Handed Chinaman","Right Handed Leg Spin","Right Handed Off Spin","Left Handed Medium Fast","Left Handed Chinaman","Left Handed Leg Spin","Left Handed Off Spin"];
-            // var bowlPlayType = ["Right Handed Batsman","Left Handed Batsman"];
-            var batPlayType = ["Right Handed Batsman","Left Handed Batsman"];
+            var bowlPlayType = ["Right-arm medium","Right Handed Chinaman","Right Handed Leg Spin","Right Handed Off Spin","Left Handed Medium Fast","Left Handed Chinaman","Left Handed Leg Spin","Left Handed Off Spin"];
+            var batPlayType = ["Right Handed Bat","Left Handed Bat"];
             var viewTypes = ['home','player-detail','player-detail-edit','register'];
             const urlSearchParams = new URLSearchParams(window.location.search);
             const params = Object.fromEntries(urlSearchParams.entries());            
@@ -257,6 +208,7 @@
                     populateDropdown(res.teams,'player-team');
                     populateDropdown(batPlayType,'player-batType');
                     populateDropdown(bowlPlayType,'player-bowlType');
+                    if (view == 'home') populateFilters();
                 });
                 if (view == 'home'){
                     prepareTable();
@@ -285,8 +237,9 @@
             /**
              * Function to prefill dropdowns
              */
-            function populateDropdown(list,elementId,val=null){
+            function populateDropdown(list,elementId,val=null,addDefault=false){
                 var selectElement = document.getElementById(elementId);
+                // if 
                 list.forEach(opt =>{
                     newElement = document.createElement('option');
                     newElement.textContent = opt;
@@ -486,10 +439,124 @@
                     currentPlayer[parent][child][id] = event.value.match(/^[+-]?([0-9]*[.])?[0-9]+$/) != null ? (floatValue == true ? parseFloat(event.value): parseInt(event.value)):event.value;
                 }
             }
-            function prepareTable(){
-                console.log('table loaded');
-                $('#example').DataTable();
+            function prepareTable(filters=null){
+                var filter = filters != null ? filters: {};
+                $.get('/getAllPlayers', filter, function(res){
+                    if ($.fn.DataTable.isDataTable( '#players-table' ) ) {
+                        $('#players-table').DataTable().clear().destroy();
+                        $('#players-table thead').html(''); 
+                    }
+
+                    playerHead = document.getElementById('players-head');
+                    playerBody = document.getElementById('players-body');
+                    headList = ['id','name','dob','team','role','batting_type','bowling_type'];
+                    
+                    head = document.createElement('tr');
+
+                    headList.forEach(label=>{
+                        title = document.createElement('th');
+                        title.innerHTML = label;
+                        head.appendChild(title);
+                    });
+                    playerHead.appendChild(head);
+
+
+                    res.data.forEach(tuple=>{
+                        row = document.createElement('tr');
+                        for (value in tuple){
+                            entry = document.createElement('td');
+                            entry.className = 'hover';
+                            entry.innerHTML = tuple[value];
+                            row.appendChild(entry);
+                        };
+                        playerBody.appendChild(row);
+                    });
+                    table = $('#players-table').DataTable();
+                });                
             }
+
+            /**
+             * Function to populate filters on home screen
+            */
+            function populateFilters(){
+                filters ={
+                    'team':{
+                        'id': 'team-filter',
+                        'values': filterInfo.teams,
+                        'label': 'Team'
+
+                    },
+                    'role':{
+                        'id': 'role-filter',
+                        'values': filterInfo.roles,
+                        'label': 'Role'
+                    },
+                    'batting_type':{
+                        'id': 'battype-filter',
+                        'values': batPlayType,
+                        'label': 'Batting Type'
+                    },
+                    'bowling_type':{
+                        'id': 'bowltype-filter',
+                        'values': bowlPlayType,
+                        'label': 'Bowling Type'
+                    }
+                }
+                homeFilters = document.getElementById('home-filters');
+                for (filter in filters){
+                    parentDiv = document.createElement('div');
+                    parentDiv.className = "input-container ic2";                    
+                    selectElement = document.createElement('select');
+                    selectElement.id = filters[filter].id;
+                    selectElement.type = 'select';
+                    selectElement.className = "input ic-dark";
+                    selectElement.name = filters[filter].id;
+                    selectElement.placeholder = " ";                  
+
+                    childDiv = document.createElement('div');
+                    childDiv.className = "cut cut-long";
+
+                    labelSection = document.createElement('label');
+                    labelSection.for = filters[filter].id;
+                    labelSection.className = "placeholder";
+                    labelSection.innerHTML = filters[filter].label;
+
+                    parentDiv.appendChild(selectElement);
+                    parentDiv.appendChild(childDiv);
+                    parentDiv.appendChild(labelSection);                    
+                    homeFilters.appendChild(parentDiv);                    
+                    // <option disabled selected value> -- select an option -- </option>
+                    populateDropdown(filters[filter].values,filters[filter].id,null,true);                   
+                    
+                }
+                // <button id="edit-button" class="edit-button"  onclick ="edit()">Edit</button>
+                filterButton = document.getElementById('filter-button');
+                buttonElement = document.createElement('button');
+                buttonElement.id = 'fil-button';
+                buttonElement.setAttribute('onclick','filterResults()');
+                buttonElement.innerHTML = "Filter";
+                filterButton.appendChild(buttonElement);
+            }
+
+            /**
+             * Function to send Filters
+             */ 
+            function filterResults(){
+                var filterValue = {
+                    'team' : document.getElementById('team-filter').value,
+                    'role': document.getElementById('role-filter').value,
+                    'batting_type': document.getElementById('battype-filter').value,
+                    'bowling_type': document.getElementById('bowltype-filter').value
+                }
+
+                prepareTable(filterValue);
+            }
+
+            $('#players-table').on('click', 'tbody tr', function() {
+                playerDetail = table.row(this).data();
+                id = playerDetail[0];
+                window.location.href = '?view=player-detail&id='+id;
+            })
         </script>
     </body>
 </html>

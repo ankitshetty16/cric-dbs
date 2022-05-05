@@ -301,3 +301,10 @@ button[disabled]{
     display: flex;
     width: fit-content;
 }
+.hover {
+    cursor: pointer;
+}
+.search-filters{
+    display: inline-flex;
+    width: 80%;
+}
