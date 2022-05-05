@@ -311,8 +311,22 @@ class updatePlayer(Resource):
 
 class getAllPlayers(Resource):
     def get(self):
+        team = request.args.get('team')
+        role = request.args.get('role')
+        battingType = request.args.get('batting_type')
+        bowlingType = request.args.get('bowling_type')
+        print(team)
         cur = conn.cursor()
-        getPlayerQuery = "select p.id, p.name,p.dob,t.name as team,r.name as role,p.batting_type,p.bowling_type from player_info p, teams t, player_roles r where r.id = p.role_id and p.team_id = t.id;"
+        getPlayerQuery = "select p.id, p.name,p.dob,t.name as team,r.name as role,p.batting_type,p.bowling_type from player_info p, teams t, player_roles r where r.id = p.role_id and p.team_id = t.id"
+        if team is not None:
+            getPlayerQuery = getPlayerQuery + ' and t.name = ' + '\''+team +'\''
+        if role is not None:
+            getPlayerQuery = getPlayerQuery + ' and r.name = ' + '\''+role+'\''
+        if battingType is not None:
+            getPlayerQuery = getPlayerQuery + ' and p.batting_type = ' + '\''+battingType+'\''
+        if bowlingType is not None:
+            getPlayerQuery = getPlayerQuery + ' and p.bowling_type = ' + '\''+bowlingType+'\''
+        getPlayerQuery = getPlayerQuery + ';'
         cur.execute(getPlayerQuery)
         result = cur.fetchmany(50)
         res = []
