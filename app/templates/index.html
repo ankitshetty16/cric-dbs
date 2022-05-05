@@ -87,7 +87,7 @@
                         <div class="container detail-container">
                             <div class="detail-top">
                                 <p class="heading padding-top register-head detail-head">Player Details</p>
-                                <button id="edit-button" class="edit-button">Edit</button>
+                                <button id="edit-button" class="edit-button"  onclick ="edit()">Edit</button>
                             </div>
                             <p class="heading-3 register-head padding-top padding-bottom">Player Information</p>
                             <div id="basic-detail" class="just-wrap"></div>
@@ -126,6 +126,56 @@
                         </div>
                     </div>
                 </div>
+                <div id="player-detail-edit">
+                    <div class="main-container">
+                        <div class="container detail-container">
+                            <div class="detail-top">
+                                <p class="heading padding-top register-head detail-head">Player Details</p>
+                                <button id="save-button" class="edit-button" onclick="savePlayer()">Save</button>
+                            </div>
+                            <p class="heading-3 register-head padding-top padding-bottom">Player Information</p>
+                                <div id="basic-form" class="form padding-bottom"></div>
+                            <div class="split-view">
+                                <div class="box-6 split-border">
+                                    <p class="heading-3 register-head padding-bottom">Batting Statistics</p>
+                                    <div id="bat-detail">
+                                        <div id="bat-odi">
+                                            <p class="heading-4 register-head padding-bottom">ODIs</p>
+                                            <div id="batting-odi-form" class="form padding-bottom"></div>
+                                        </div>
+                                        <div id="bat-t20">
+                                            <p class="heading-4 register-head padding-top padding-bottom">T20s</p>
+                                            <div id="batting-t20-form" class="form padding-bottom"></div>
+                                        </div>
+                                        <div id="bat-test">
+                                            <p class="heading-4 register-head padding-top padding-bottom">Tests</p>
+                                            <div id="batting-test-form" class="form padding-bottom"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="box-6">
+                                    <p class="heading-3 register-head padding-bottom">Bowling Statistics</p>
+                                    <div id="bowl-detail">
+                                        <div id="bowl-odi">
+                                            <p class="heading-4 register-head padding-bottom">ODIs</p>
+                                            <div id="bowling-odi-form" class="form padding-bottom"></div>
+                                        </div>
+                                        <div id="bowl-t20">
+                                            <p class="heading-4 register-head padding-top padding-bottom">T20s</p>
+                                            <div id="bowling-t20-form" class="form padding-bottom"></div>
+                                        </div>
+                                        <div id="bowl-test">
+                                            <p class="heading-4 register-head padding-top padding-bottom">Tests</p>
+                                            <div id="bowling-test-form" class="form padding-bottom"></div>
+                                        </div>                                        
+                                    </div>
+                                </div> -->
+                            </div>
+                            </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>                
                 <div id="register">
                     <div class="main-container">
                         <div class="container register-container">
@@ -182,14 +232,15 @@
             </footer>                      
         </main>
         <script>
-            // var bowlPlayType = ["Right Handed Medium Fast","Right Handed Chinaman","Right Handed Leg Spin","Right Handed Off Spin","Left Handed Medium Fast","Left Handed Chinaman","Left Handed Leg Spin","Left Handed Off Spin"];
-            var bowlPlayType = ["Right Handed Batsman","Left Handed Batsman"];
+            var bowlPlayType = ["Right Handed Medium Fast","Right Handed Chinaman","Right Handed Leg Spin","Right Handed Off Spin","Left Handed Medium Fast","Left Handed Chinaman","Left Handed Leg Spin","Left Handed Off Spin"];
+            // var bowlPlayType = ["Right Handed Batsman","Left Handed Batsman"];
             var batPlayType = ["Right Handed Batsman","Left Handed Batsman"];
-            var viewTypes = ['home','player-detail','register'];
+            var viewTypes = ['home','player-detail','player-detail-edit','register'];
             const urlSearchParams = new URLSearchParams(window.location.search);
             const params = Object.fromEntries(urlSearchParams.entries());            
             var view = params.view != undefined ? params.view : 'home';
-
+            var currentPlayer = {};
+            var filterInfo = {};
             var roles = [];
             var teams = [];
             
@@ -201,6 +252,7 @@
             function loadInit(){
                 toggleView();
                 $.get("/filterInfo", function(res){
+                    filterInfo = res;
                     populateDropdown(res.roles,'player-role');
                     populateDropdown(res.teams,'player-team');
                     populateDropdown(batPlayType,'player-batType');
@@ -211,7 +263,10 @@
                 }else if(view == 'player-detail'){
                     var id = params.id != undefined ? params.id : 0;
                     populatePlayerInfo(id);
-                }   
+                }else if(view == 'player-detail-edit'){
+                    var id = params.id != undefined ? params.id : 0;
+                    populatePlayerInfo(id);
+                }
             }
 
             /**
@@ -230,12 +285,15 @@
             /**
              * Function to prefill dropdowns
              */
-            function populateDropdown(list,elementId){
+            function populateDropdown(list,elementId,val=null){
                 var selectElement = document.getElementById(elementId);
                 list.forEach(opt =>{
                     newElement = document.createElement('option');
                     newElement.textContent = opt;
                     newElement.value = opt;
+                    if(opt == val){
+                        newElement.selected = true;
+                    }
                     selectElement.appendChild(newElement);
                 });
             }
@@ -279,13 +337,19 @@
                     if (res == 404){
                         alert("There is some issue in loading this page. Please check the player ID and try again");
                     }else{
+                        currentPlayer = {};
+                        currentPlayer = res;
                         buildSection(res['player_info'],'basic-detail','detail-display');
                         buildSection(res['batting_stats']['odi'],'bat-odi','detail-col');
                         buildSection(res['batting_stats']['t20'],'bat-t20','detail-col');
                         buildSection(res['batting_stats']['test'],'bat-test','detail-col');
                         buildSection(res['bowling_stats']['odi'],'bowl-odi','detail-col');
                         buildSection(res['bowling_stats']['t20'],'bowl-t20','detail-col');
-                        buildSection(res['bowling_stats']['test'],'bowl-test','detail-col');                        
+                        buildSection(res['bowling_stats']['test'],'bowl-test','detail-col');
+                        
+                        if (view == 'player-detail-edit'){
+                            editPlayer();
+                        }
                     }
                 });
             }
@@ -313,6 +377,115 @@
                 };
             }
 
+            /**
+             * Function to route to edit screen
+             */
+            function edit(){
+                var id = params.id;
+                if (id == undefined){
+                    return alert('Error in processing request, Please try again');
+                }
+                window.location.href = '?view=player-detail-edit&id='+id;
+            }
+            /*
+            * Function to edit and save player details
+            */
+            function editPlayer(){
+                var internalMap = ['batting_stats','bowling_stats'];
+                var selectFields = ['role','team','batting_type','bowling_type','format'];
+                for(section in currentPlayer){
+                    for (key in currentPlayer[section]){
+                        if(internalMap.includes(section)){
+                            for (format in currentPlayer[section][key]){
+                                generateFields(section.split("_")[0]+'-'+key+'-form',format,selectFields.includes(format)?'select': format=='dob'?'date':'text','cut-long',format,currentPlayer[section][key][format],section+'-'+key);
+                            }
+                        }else{
+                            generateFields('basic-form',key,selectFields.includes(key)?'select': key=='dob'?'date':'text','cut-long',key,currentPlayer[section][key],section);
+                        }
+                    }
+                }                   
+            }
+
+            /**
+             * Function to dynamically generate fields
+             */
+            function generateFields(elementId,id,type,className,label,val,sections){
+                if (label == 'id'){
+                    return
+                }
+                var element = document.getElementById(elementId);
+                if (element == null) return;
+                parentDiv = document.createElement('div');
+                parentDiv.className = "input-container ic2";
+                if(type == 'select'){
+                    inputElement = document.createElement('select');
+                    inputElement.setAttribute("onchange", "update('"+id+"',this,'"+sections+"')");
+                }else{
+                    inputElement = document.createElement('input');
+                    inputElement.setAttribute("onkeyup", "update('"+id+"',this,'"+sections+"')");
+
+                }
+                if(type=="date"){
+                    inputElement.setAttribute("onchange", "update('"+id+"',this,'"+sections+"')");
+                }
+
+                inputElement.id = sections.split("-")[1] ? sections.split("-")[1]+'-'+id : id;;
+                inputElement.type = type;
+                inputElement.className = "input ic-dark";
+                inputElement.name = sections.split("-")[1] ? sections.split("-")[1]+'-'+id : id;
+                inputElement.required = true;
+                inputElement.placeholder = " ";
+                inputElement.value = val;                    
+
+                childDiv = document.createElement('div');
+                childDiv.className = "cut "+className;
+
+                labelSection = document.createElement('label');
+                labelSection.for = sections.split("-")[1] ? sections.split("-")[1]+'-'+id : id;;
+                labelSection.className = "placeholder";
+                labelSection.innerHTML = label;
+
+                parentDiv.appendChild(inputElement);
+                parentDiv.appendChild(childDiv);
+                parentDiv.appendChild(labelSection);
+
+                element.appendChild(parentDiv);
+                if (type == 'select'){
+                    selectData={
+                        'role': filterInfo.roles,
+                        'team': filterInfo.teams,
+                        'batting_type': batPlayType,
+                        'bowling_type': bowlPlayType,
+                        'format': filterInfo.formats
+                    }
+                    populateDropdown(selectData[id],sections.split("-")[1] ? sections.split("-")[1]+'-'+id : id,val);
+                }                    
+            }
+
+            /**
+             * Function to save player details
+             */
+            function savePlayer(){
+                $.post("/updatePlayer",JSON.stringify(currentPlayer), function(res){
+                    if (res == 404){
+                        alert("Please check the fields again. One or more have some issues in them");
+                    }else{
+                        alert("Player details have been updated succesfully");
+                        window.location.href = '?view=player-detail&id='+params.id;
+                    }
+                });                
+            }
+            function update(id,event,sections){
+                parent = sections.includes('-') ? sections.split('-')[0]: sections;
+                child = sections.includes('-') ? sections.split('-')[1]: null;
+                floatValue = event.value.toString().indexOf('.') != -1 ? true : false;
+
+                if (child == null){
+                    currentPlayer[parent][id] = event.value.match(/^[+-]?([0-9]*[.])?[0-9]+$/) != null ? floatValue ? parseFloat(event.value): parseInt(event.value) :event.value;
+                }else{
+                    currentPlayer[parent][child][id] = event.value.match(/^[+-]?([0-9]*[.])?[0-9]+$/) != null ? (floatValue == true ? parseFloat(event.value): parseInt(event.value)):event.value;
+                }
+            }
             function prepareTable(){
                 console.log('table loaded');
                 $('#example').DataTable();

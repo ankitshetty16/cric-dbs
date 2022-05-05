@@ -200,6 +200,10 @@ button[disabled]{
     margin-top: 30px;
 }
 
+.ic-dark{
+    box-shadow: 0 -2px 10px rgb(0 0 0);
+}
+
 .input {
     border-radius: 12px;
     border: 0;
@@ -213,7 +217,7 @@ button[disabled]{
 }
 
 .cut {
-    background-color: #242124;
+    background-color: none;
     border-radius: 10px;
     height: 20px;
     left: 20px;
@@ -237,6 +241,7 @@ button[disabled]{
 .input:focus ~ .cut,
 .input:not(:placeholder-shown) ~ .cut {
     transform: translateY(8px);
+    background-color: #242124;
 }
 
 .placeholder {
