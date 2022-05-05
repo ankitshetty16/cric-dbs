@@ -309,12 +309,32 @@ class updatePlayer(Resource):
         # except:
         #     return {"status_code": 404, "msg" : "exception has occurred"}, 404
 
+class getAllPlayers(Resource):
+    def get(self):
+        cur = conn.cursor()
+        getPlayerQuery = "select p.id, p.name,p.dob,t.name as team,r.name as role,p.batting_type,p.bowling_type from player_info p, teams t, player_roles r where r.id = p.role_id and p.team_id = t.id;"
+        cur.execute(getPlayerQuery)
+        result = cur.fetchmany(50)
+        res = []
+        for rec in result:
+            record = {}
+            record['player_id'] = int(rec[0])
+            record['name'] = str(rec[1])
+            record['dob'] = str(rec[2])
+            record['team'] = str(rec[3])
+            record['role'] = str(rec[4])
+            record['batting_type'] = str(rec[5])
+            record['bowling_type'] = str(rec[6])
+            res.append(record)
+        return {'data': res},200
+
 def start_endpoint():
     api.add_resource(register,'/register')
     api.add_resource(filterInfo,'/filterInfo')
     api.add_resource(getFormats,'/getFormats')
     api.add_resource(getPlayer,'/getPlayer')
     api.add_resource(updatePlayer,'/updatePlayer')
+    api.add_resource(getAllPlayers,'/getAllPlayers')
     app.run(host="0.0.0.0", port="80",debug=True)
 
 def test_db():
@@ -333,5 +353,6 @@ def test_db():
 
 if __name__ == '__main__':
     start_endpoint()
+    test_db()
     #test_db()
     #conn.close()
