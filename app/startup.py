@@ -7,6 +7,8 @@ import psycopg2
 import json
 import datetime
 
+from scipy.fft import idct
+
 app = Flask(__name__)
 api = Api(app)
 
@@ -131,8 +133,9 @@ class getFormats(Resource):
 
 def getPlayerInfo(id):
     cur = conn.cursor()
-    player_query = "select * from player_info where id = %s"
-    cur.execute(player_query,(id),)
+    id = int(id)
+    player_query = "select p.id,p.name,p.dob,r.name,t.name, p.batting_type,p.bowling_type from teams t , player_info p join player_roles r on p.role_id = r.id where p.team_id = t.id and p.id = %s;"
+    cur.execute(player_query,(id,))
     player = cur.fetchone()
     cur.close()
     if player is None:
@@ -141,8 +144,10 @@ def getPlayerInfo(id):
     res['id'] = int(player[0])
     res['name'] = str(player[1])
     res['dob'] = str(player[2])
-    res['role'] = get_roleId(int(player[3]))
-    res['team'] = getTeam(int(player[4]))
+    # res['role'] = get_roleId(int(player[3]))
+    # res['team'] = getTeam(int(player[4]))
+    res['role'] = str(player[3])
+    res['team'] = str(player[4])
     res['batting_type'] = str(player[5])
     res['bowling_type'] = str(player[6])
     return res
@@ -150,7 +155,7 @@ def getPlayerInfo(id):
 def getBattingStats(id):
     cur = conn.cursor()
     player_query = "select * from batting_statistics where player_id = %s"
-    cur.execute(player_query,(id),)
+    cur.execute(player_query,(id,))
     players = cur.fetchall()
     cur.close()
     if players is None:
@@ -160,20 +165,20 @@ def getBattingStats(id):
     #data = []
     for player in players:
         res = {}
-        res['id'] = int(player[1])
-        res['format'] = getFormat(int(player[2]))
-        res['matches'] = int(player[3])
-        res['innings'] = int(player[4])
-        res['runs'] = int(player[5])
-        res['balls_faced'] = int(player[6])
-        res['strike_rate'] = float(player[7])
-        res['average'] = float(player[8])
-        res['ducks'] = int(player[9])
-        res['50s'] = int(player[10])
-        res['100s'] = int(player[11])
-        res['200s'] = int(player[12])
-        res['highest_score'] = int(player[13])
-        res['not_outs'] = int(player[14])
+        res['id'] = int(player[0])
+        res['format'] = getFormat(int(player[1]))
+        res['matches'] = int(player[2])
+        res['innings'] = int(player[3])
+        res['runs'] = int(player[4])
+        res['balls_faced'] = int(player[5])
+        res['strike_rate'] = float(player[6])
+        res['average'] = float(player[7])
+        res['ducks'] = int(player[8])
+        res['50s'] = int(player[9])
+        res['100s'] = int(player[10])
+        res['200s'] = int(player[11])
+        res['highest_score'] = int(player[12])
+        res['not_outs'] = int(player[13])
         result[res['format']] = res
         update_format[res['format']] = 1
     emptyRes = {}
@@ -203,8 +208,9 @@ def getBattingStats(id):
 
 def getBowlingStats(id):
     cur = conn.cursor()
+    id = int(id)
     player_query = "select * from bowling_statistics where player_id = %s"
-    cur.execute(player_query,(id),)
+    cur.execute(player_query,(id,))
     players = cur.fetchall()
     cur.close()
     if players is None:
@@ -213,23 +219,24 @@ def getBowlingStats(id):
     #data = []
     for player in players:
         res = {}
-        res['id'] = int(player[1])
-        res['format'] = getFormat(int(player[2]))
-        res['matches'] = int(player[3])
-        res['innings'] = int(player[4])
-        res['balls'] = int(player[5])
-        res['economy'] = float(player[6])
-        res['average'] = float(player[7])
-        res['maidens'] = int(player[8])
-        res['wickets'] = int(player[9])
-        res['4_wicket'] = int(player[10])
-        res['5_wicket'] = int(player[11])
+        res['id'] = int(player[0])
+        res['format'] = getFormat(int(player[1]))
+        res['matches'] = int(player[2])
+        res['innings'] = int(player[3])
+        res['balls'] = int(player[4])
+        res['economy'] = float(player[5])
+        res['average'] = float(player[6])
+        res['maidens'] = int(player[7])
+        res['wickets'] = int(player[8])
+        res['4_wicket'] = int(player[9])
+        res['5_wicket'] = int(player[10])
         result[res['format']] = res
     return result
 
 class getPlayer(Resource):
     def get(self):
         player_id = request.args.get('id')
+        #print(type(player_id))
         player_info = getPlayerInfo(player_id)
         if player_info == {}:
             return {"msg":"record not found", "status_code": 400},400
@@ -315,7 +322,7 @@ class getAllPlayers(Resource):
         role = request.args.get('role')
         battingType = request.args.get('batting_type')
         bowlingType = request.args.get('bowling_type')
-        print(team)
+        #print(team)
         cur = conn.cursor()
         getPlayerQuery = "select p.id, p.name,p.dob,t.name as team,r.name as role,p.batting_type,p.bowling_type from player_info p, teams t, player_roles r where r.id = p.role_id and p.team_id = t.id"
         if team is not None:
@@ -356,7 +363,7 @@ def test_db():
     test_query = "select * from player_info"
     cur.execute(test_query)
     rec = cur.fetchall()
-    print(rec)
+    #print(rec)
     cur.close()
 
 # @app.after_request
@@ -367,6 +374,6 @@ def test_db():
 
 if __name__ == '__main__':
     start_endpoint()
-    test_db()
+    #test_db()
     #test_db()
     #conn.close()
