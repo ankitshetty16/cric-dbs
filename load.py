@@ -268,10 +268,10 @@ def batting_statistics(df):
 if __name__ == '__main__':
     print("Welcome!")
     print("loading the datatables....")
-    with open("player_info_with_randomized_data_fnl_list_edit.csv", "r") as f:
+    with open("players_point.csv", "r") as f:
         reader= csv.reader(f)
         head= next(reader)
-    df=pd.read_csv("player_info_with_randomized_data_fnl_list_edit.csv",usecols=head)
+    df=pd.read_csv("players_point.csv",usecols=head)
     
 
     formats()
