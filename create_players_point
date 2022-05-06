@@ -94,6 +94,6 @@ CREATE TABLE player_rankings (
 	FOREIGN KEY (format_id)
 		  REFERENCES formats (id),
 	FOREIGN KEY (role_id)
-		  REFERENCES player_roles (id)
+		  REFERENCES player_roles (id),
 	PRIMARY KEY (player_id, format_id,role_id)		  		  
 );
