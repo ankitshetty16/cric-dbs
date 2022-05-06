@@ -38,16 +38,16 @@ def player_roles(df):
     cur.close()
     return roles
 
-def fill_player_ranking(id,player_id,format_id,role_id,rank):
+def fill_player_ranking(player_id,format_id,role_id,rank):
     cur=conn.cursor()
-    insertQuery = "Insert into player_rankings values(%s,%s,%s,%s,%s); "
-    cur.execute(insertQuery,(id,player_id,format_id,role_id,rank))
+    insertQuery = "Insert into player_rankings values(%s,%s,%s,%s); "
+    cur.execute(insertQuery,(player_id,format_id,role_id,rank))
     conn.commit()
     cur.close()
 
 
 def player_rankings(df,roles):
-    count=1
+    # count=1
     x=0
     for j in df.player_id:   
         player_id=j
@@ -58,42 +58,42 @@ def player_rankings(df,roles):
             for k, v in roles.items():
                 if df.player_role[x]==v:
                     role_id=k
-            id=count
+            # id=count
             # if r=="bat":
             if role_id==2 or role_id==1 or role_id==4:
                 if m==1:
                     rank=df.player_bat_testrank[x]
                     if rank:
-                        fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        count+=1
+                        fill_player_ranking(int(player_id),int(format_id),int(role_id),int(rank))
+                        # count+=1
                 elif m==2:
                     rank=df.player_bat_Odirank[x]
                     if rank:
-                        fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        count+=1
+                        fill_player_ranking(int(player_id),int(format_id),int(role_id),int(rank))
+                        # count+=1
                 elif m==3:
                     rank=df.player_bat_t20rank[x]
                     if rank:
-                        fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        count+=1
+                        fill_player_ranking(int(player_id),int(format_id),int(role_id),int(rank))
+                        # count+=1
             # elif r=="bowl":
             elif role_id==3 or role_id==5:
                 if m==1:
                     rank=df.player_bowl_testrank[x]
                     if rank:
-                        fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        count+=1
+                        fill_player_ranking(int(player_id),int(format_id),int(role_id),int(rank))
+                        # count+=1
                 elif m==2:
                     rank=df.player_bowl_Odirank[x]
                     if rank:
-                        fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        count+=1
+                        fill_player_ranking(int(player_id),int(format_id),int(role_id),int(rank))
+                        # count+=1
                 elif m==3:
                     rank=df.player_bowl_t20rank[x]
                     if rank:
-                        fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        count+=1
-            print(count)
+                        fill_player_ranking(int(player_id),int(format_id),int(role_id),int(rank))
+                        # count+=1
+            # print(count)
         x+=1
         print(x)
 
@@ -143,23 +143,23 @@ def player_info(df,roles,team):
         bowling_type=df.Player_bowlingtype[x]
         fill_in_player_info(int(id),name,dob,int(role_id),int(team_id),batting_type,bowling_type) 
 
-def fill_in_bowling_stats(id,player_id,format_id,matches,innings,balls,economy,average,maidens,wickets,wicket_4,wicket_5):
+def fill_in_bowling_stats(player_id,format_id,matches,innings,balls,economy,average,maidens,wickets,wicket_4,wicket_5):
     cur=conn.cursor()
-    insertQuery = "Insert into bowling_statistics values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s); "
-    cur.execute(insertQuery,(id,player_id,format_id,matches,innings,balls,economy,average,maidens,wickets,wicket_4,wicket_5))
+    insertQuery = "Insert into bowling_statistics values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s); "
+    cur.execute(insertQuery,(player_id,format_id,matches,innings,balls,economy,average,maidens,wickets,wicket_4,wicket_5))
     conn.commit()
     cur.close()                                
     
 def bowling_statistics(df):
     x=0
-    count=1
+    # count=1
     
     for j in df.player_id:   
         player_id=j
         for m in [1,2,3]:
             format_id=m
             
-            id =count
+            # id =count
             if m==1:
                 matches= df.player_Bowling_Matches_Test[x]
                 innings=df.player_Bowling_Innings_Test[x]
@@ -170,7 +170,7 @@ def bowling_statistics(df):
                 wickets=df.player_Bowling_Wickets_Test[x]
                 wicket_4=df.player_Bowling_4W_Test[x]
                 wicket_5=df.player_Bowling_5W_Test[x]
-                fill_in_bowling_stats(int(id),int(player_id),int(format_id),int(matches),int(innings),int(balls),float(economy),float(average),int(maidens),int(wickets),int(wicket_4),int(wicket_5))
+                fill_in_bowling_stats(int(player_id),int(format_id),int(matches),int(innings),int(balls),float(economy),float(average),int(maidens),int(wickets),int(wicket_4),int(wicket_5))
                                         
 
             elif m==2:
@@ -183,7 +183,7 @@ def bowling_statistics(df):
                 wickets=df.player_Bowling_Wickets_ODI[x]
                 wicket_4=df.player_Bowling_4W_ODI[x]
                 wicket_5=df.player_Bowling_5W_ODI[x]
-                fill_in_bowling_stats(int(id),int(player_id),int(format_id),int(matches),int(innings),int(balls),float(economy),float(average),int(maidens),int(wickets),int(wicket_4),int(wicket_5))
+                fill_in_bowling_stats(int(player_id),int(format_id),int(matches),int(innings),int(balls),float(economy),float(average),int(maidens),int(wickets),int(wicket_4),int(wicket_5))
 
             elif m==3:
                 matches= df.player_Bowling_Matches_T20[x]
@@ -195,20 +195,20 @@ def bowling_statistics(df):
                 wickets=df.player_Bowling_Wickets_T20[x]
                 wicket_4=df.player_Bowling_4W_T20[x]
                 wicket_5=df.player_Bowling_5W_T20[x]
-                fill_in_bowling_stats(int(id),int(player_id),int(format_id),int(matches),int(innings),int(balls),float(economy),float(average),int(maidens),int(wickets),int(wicket_4),int(wicket_5))
-            count+=1                            
+                fill_in_bowling_stats(int(player_id),int(format_id),int(matches),int(innings),int(balls),float(economy),float(average),int(maidens),int(wickets),int(wicket_4),int(wicket_5))
+            # count+=1                            
         x+=1
 
-def fill_in_batting_stats(id,player_id,format_id,matches,innings,runs,balls_faced,strike_rate,average,ducks,no_50s,no_100s,no_200s,highest_score,not_outs):
+def fill_in_batting_stats(player_id,format_id,matches,innings,runs,balls_faced,strike_rate,average,ducks,no_50s,no_100s,no_200s,highest_score,not_outs):
     cur=conn.cursor()
-    insertQuery = "Insert into batting_statistics values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s); "
-    cur.execute(insertQuery,(id,player_id,format_id,matches,innings,runs,balls_faced,strike_rate,average,ducks,no_50s,no_100s,no_200s,highest_score,not_outs))
+    insertQuery = "Insert into batting_statistics values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s); "
+    cur.execute(insertQuery,(player_id,format_id,matches,innings,runs,balls_faced,strike_rate,average,ducks,no_50s,no_100s,no_200s,highest_score,not_outs))
     conn.commit()
     cur.close()   
 
 def batting_statistics(df):
     x=0
-    count=1
+    # count=1
 
     for j in df.player_id:   
         player_id=j    
@@ -216,7 +216,7 @@ def batting_statistics(df):
     
         for m in [1,2,3]:
             format_id=m
-            id =count
+            # id =count
             if m==1:
                 matches= df.player_batting_Matches_Test[x]
                 innings=df.player_batting_Inning_Test[x]
@@ -230,7 +230,7 @@ def batting_statistics(df):
                 no_200s=df.player_batting_200s_Test[x]
                 highest_score=df.player_batting_Highest_Test[x]
                 not_outs=df.player_batting_NotOut_Test[x]
-                fill_in_batting_stats(int(id),int(player_id),int(format_id),int(matches),int(innings),int(runs),int(balls_faced),float(strike_rate),float(average),int(ducks),int(no_50s),int(no_100s),int(no_200s),int(highest_score),int(not_outs))
+                fill_in_batting_stats(int(player_id),int(format_id),int(matches),int(innings),int(runs),int(balls_faced),float(strike_rate),float(average),int(ducks),int(no_50s),int(no_100s),int(no_200s),int(highest_score),int(not_outs))
 
             elif m==2:
                 matches= df.player_batting_Matches_ODI[x]
@@ -245,7 +245,7 @@ def batting_statistics(df):
                 no_200s=df.player_batting_200s_ODI[x]
                 highest_score=df.player_batting_Highest_ODI[x]
                 not_outs=df.player_batting_NotOut_ODI[x]
-                fill_in_batting_stats(int(id),int(player_id),int(format_id),int(matches),int(innings),int(runs),int(balls_faced),float(strike_rate),float(average),int(ducks),int(no_50s),int(no_100s),int(no_200s),int(highest_score),int(not_outs))
+                fill_in_batting_stats(int(player_id),int(format_id),int(matches),int(innings),int(runs),int(balls_faced),float(strike_rate),float(average),int(ducks),int(no_50s),int(no_100s),int(no_200s),int(highest_score),int(not_outs))
                                         
     
             elif m==3:
@@ -261,8 +261,8 @@ def batting_statistics(df):
                 no_200s=df.player_batting_200s_T20[x]
                 highest_score=df.player_batting_Highest_T20[x]
                 not_outs=df.player_batting_NotOut_T20[x]
-                fill_in_batting_stats(int(id),int(player_id),int(format_id),int(matches),int(innings),int(runs),int(balls_faced),float(strike_rate),float(average),int(ducks),int(no_50s),int(no_100s),int(no_200s),int(highest_score),int(not_outs))
-            count+=1
+                fill_in_batting_stats(int(player_id),int(format_id),int(matches),int(innings),int(runs),int(balls_faced),float(strike_rate),float(average),int(ducks),int(no_50s),int(no_100s),int(no_200s),int(highest_score),int(not_outs))
+            # count+=1
         x+=1
     
 if __name__ == '__main__':

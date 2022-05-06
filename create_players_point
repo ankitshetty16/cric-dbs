@@ -44,7 +44,6 @@ CREATE TABLE player_info (
 );
 
 CREATE TABLE batting_statistics (
-	id serial PRIMARY KEY,
 	player_id int NOT NULL,
 	format_id int NOT NULL,
 	matches int NOT NULL,
@@ -62,11 +61,11 @@ CREATE TABLE batting_statistics (
 	FOREIGN KEY (player_id)
 		  REFERENCES player_info (id),
 	FOREIGN KEY (format_id)
-		  REFERENCES formats (id)		  
+		  REFERENCES formats (id),
+	PRIMARY KEY (player_id, format_id) 
 );
 
 CREATE TABLE bowling_statistics (
-	id serial PRIMARY KEY,
 	player_id int NOT NULL,
 	format_id int NOT NULL,
 	matches int NOT NULL,
@@ -81,11 +80,11 @@ CREATE TABLE bowling_statistics (
 	FOREIGN KEY (player_id)
 		  REFERENCES player_info (id),
 	FOREIGN KEY (format_id)
-		  REFERENCES formats (id)			  
+		  REFERENCES formats (id),
+	PRIMARY KEY (player_id, format_id)		  		  
 );
 
 CREATE TABLE player_rankings (
-	id serial PRIMARY KEY,
 	player_id int NOT NULL,
 	format_id int NOT NULL,
 	role_id int NOT NULL,
@@ -95,5 +94,6 @@ CREATE TABLE player_rankings (
 	FOREIGN KEY (format_id)
 		  REFERENCES formats (id),
 	FOREIGN KEY (role_id)
-		  REFERENCES player_roles (id)		  
+		  REFERENCES player_roles (id),
+	PRIMARY KEY (player_id, format_id,role_id)		  		  
 );
