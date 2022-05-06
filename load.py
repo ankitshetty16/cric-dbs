@@ -58,31 +58,40 @@ def player_rankings(df,roles):
                 for k, v in roles.items():
                     if df.player_role[x]==v:
                         role_id=k
-                    id=count
-                    if r=="bat":
-                        if m==1:
-                            rank=df.player_bat_testrank[x]
+                id=count
+                if r=="bat":
+                    if m==1:
+                        rank=df.player_bat_testrank[x]
+                        if rank:
                             fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        elif m==2:
-                            rank=df.player_bat_Odirank[x]
+                            count+=1
+                    elif m==2:
+                        rank=df.player_bat_Odirank[x]
+                        if rank:
                             fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-
-                        elif m==3:
-                            rank=df.player_bat_t20rank[x]
+                            count+=1
+                    elif m==3:
+                        rank=df.player_bat_t20rank[x]
+                        if rank:
                             fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                    elif r=="bowl":
-                        if m==1:
-                            rank=df.player_bowl_testrank[x]
+                            count+=1
+                elif r=="bowl":
+                    if m==1:
+                        rank=df.player_bowl_testrank[x]
+                        if rank:
                             fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        elif m==2:
-                            rank=df.player_bowl_Odirank[x]
+                            count+=1
+                    elif m==2:
+                        rank=df.player_bowl_Odirank[x]
+                        if rank:
                             fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        elif m==3:
-                            rank=df.player_bowl_t20rank[x]
+                            count+=1
+                    elif m==3:
+                        rank=df.player_bowl_t20rank[x]
+                        if rank:
                             fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-
-                    count+=1
-                    print(count)
+                            count+=1
+                print(count)
         x+=1
         print(x)
 
@@ -93,9 +102,9 @@ def teams(df):
       if i not in teams.values():
         teams[count]=i
         count+=1
-    test_rank=[36,77,19,100,66,85,18,76,74,78,94,28,96,51,89,53,21,15,62,60,17,99,32,65,56,67,64,98,40,1,0,90,4,25,92,80,69,55,8,3,82,42,83,20,2]
-    Odi_rank=[21,46,4,17,14,55,84,97,80,59,22,20,1,49,44,6,63,69,62,76,13,35,66,73,47,52,0,39,81,33,31,56,53,30,28,91,98,3,70,8,67,100,61,48,24]   
-    t20_rank=[78,19,0,50,15,85,90,95,25,83,73,66,54,81,36,24,11,53,21,100,60,70,35,14,16,2,5,10,97,61,9,30,37,88,13,86,76,65,64,57,23,79,22,99,63]
+    test_rank=[36,77,19,100,66,85,18,76,74,78,94,28,96,51,89,53,21,15,62,60,17,99,32,65,56,67,64,98,40,1,120,90,4,25,92,80,69,55,8,3,82,42,83,20,2]
+    Odi_rank=[21,46,4,17,14,55,84,97,80,59,22,20,1,49,44,6,63,69,62,76,13,35,66,73,47,52,102,39,81,33,31,56,53,30,28,91,98,3,70,8,67,100,61,48,24]   
+    t20_rank=[78,19,110,50,15,85,90,95,25,83,73,66,54,81,36,24,11,53,21,100,60,70,35,14,16,2,5,10,97,61,9,30,37,88,13,86,76,65,64,57,23,79,22,99,63]
     cur=conn.cursor()
     x=0
     for k,v in teams.items():
@@ -255,6 +264,8 @@ def batting_statistics(df):
         x+=1
     
 if __name__ == '__main__':
+    print("Welcome!")
+    print("loading the datatables....")
     with open("player_info_with_randomized_data_fnl_list_edit.csv", "r") as f:
         reader= csv.reader(f)
         head= next(reader)
@@ -262,9 +273,22 @@ if __name__ == '__main__':
     
 
     formats()
+    print("formats table laoded")
     roles=player_roles(df)
+    print("player_roles table laoded")
     team =teams(df)
+    print("teams table laoded")
     player_info(df,roles,team)
+    print("player_info table laoded")
     player_rankings(df,roles)
+    print("player_ranking table loaded")
     bowling_statistics(df)
+    print("bowling_statistics table laoded")
     batting_statistics(df)
+    print("batting_statistics table laoded")
+
+
+    print("---------------------------------------")
+
+    print("The PLAYERS POINT DATATABLE is loaded ")
+    print("<<<<<<<<<<<<<<<<Have fun in PLAYERS POINT !>>>>>>>>>>>>>>>>>>>>>>>>")
