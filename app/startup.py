@@ -165,20 +165,20 @@ def getBattingStats(id):
     #data = []
     for player in players:
         res = {}
-        res['id'] = int(player[1])
-        res['format'] = getFormat(int(player[2]))
-        res['matches'] = int(player[3])
-        res['innings'] = int(player[4])
-        res['runs'] = int(player[5])
-        res['balls_faced'] = int(player[6])
-        res['strike_rate'] = float(player[7])
-        res['average'] = float(player[8])
-        res['ducks'] = int(player[9])
-        res['50s'] = int(player[10])
-        res['100s'] = int(player[11])
-        res['200s'] = int(player[12])
-        res['highest_score'] = int(player[13])
-        res['not_outs'] = int(player[14])
+        res['id'] = int(player[0])
+        res['format'] = getFormat(int(player[1]))
+        res['matches'] = int(player[2])
+        res['innings'] = int(player[3])
+        res['runs'] = int(player[4])
+        res['balls_faced'] = int(player[5])
+        res['strike_rate'] = float(player[6])
+        res['average'] = float(player[7])
+        res['ducks'] = int(player[8])
+        res['50s'] = int(player[9])
+        res['100s'] = int(player[10])
+        res['200s'] = int(player[11])
+        res['highest_score'] = int(player[12])
+        res['not_outs'] = int(player[13])
         result[res['format']] = res
         update_format[res['format']] = 1
     emptyRes = {}
@@ -219,17 +219,17 @@ def getBowlingStats(id):
     #data = []
     for player in players:
         res = {}
-        res['id'] = int(player[1])
-        res['format'] = getFormat(int(player[2]))
-        res['matches'] = int(player[3])
-        res['innings'] = int(player[4])
-        res['balls'] = int(player[5])
-        res['economy'] = float(player[6])
-        res['average'] = float(player[7])
-        res['maidens'] = int(player[8])
-        res['wickets'] = int(player[9])
-        res['4_wicket'] = int(player[10])
-        res['5_wicket'] = int(player[11])
+        res['id'] = int(player[0])
+        res['format'] = getFormat(int(player[1]))
+        res['matches'] = int(player[2])
+        res['innings'] = int(player[3])
+        res['balls'] = int(player[4])
+        res['economy'] = float(player[5])
+        res['average'] = float(player[6])
+        res['maidens'] = int(player[7])
+        res['wickets'] = int(player[8])
+        res['4_wicket'] = int(player[9])
+        res['5_wicket'] = int(player[10])
         result[res['format']] = res
     return result
 
