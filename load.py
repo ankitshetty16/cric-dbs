@@ -47,7 +47,7 @@ def fill_player_ranking(id,player_id,format_id,role_id,rank):
 
 
 def player_rankings(df,roles):
-    count=1
+    # count=1
     x=0
     for j in df.player_id:   
         player_id=j
@@ -58,42 +58,42 @@ def player_rankings(df,roles):
             for k, v in roles.items():
                 if df.player_role[x]==v:
                     role_id=k
-            id=count
+            # id=count
             # if r=="bat":
             if role_id==2 or role_id==1 or role_id==4:
                 if m==1:
                     rank=df.player_bat_testrank[x]
                     if rank:
                         fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        count+=1
+                        # count+=1
                 elif m==2:
                     rank=df.player_bat_Odirank[x]
                     if rank:
                         fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        count+=1
+                        # count+=1
                 elif m==3:
                     rank=df.player_bat_t20rank[x]
                     if rank:
                         fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        count+=1
+                        # count+=1
             # elif r=="bowl":
             elif role_id==3 or role_id==5:
                 if m==1:
                     rank=df.player_bowl_testrank[x]
                     if rank:
                         fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        count+=1
+                        # count+=1
                 elif m==2:
                     rank=df.player_bowl_Odirank[x]
                     if rank:
                         fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        count+=1
+                        # count+=1
                 elif m==3:
                     rank=df.player_bowl_t20rank[x]
                     if rank:
                         fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                        count+=1
-            print(count)
+                        # count+=1
+            # print(count)
         x+=1
         print(x)
 
@@ -152,14 +152,14 @@ def fill_in_bowling_stats(id,player_id,format_id,matches,innings,balls,economy,a
     
 def bowling_statistics(df):
     x=0
-    count=1
+    # count=1
     
     for j in df.player_id:   
         player_id=j
         for m in [1,2,3]:
             format_id=m
             
-            id =count
+            # id =count
             if m==1:
                 matches= df.player_Bowling_Matches_Test[x]
                 innings=df.player_Bowling_Innings_Test[x]
@@ -196,7 +196,7 @@ def bowling_statistics(df):
                 wicket_4=df.player_Bowling_4W_T20[x]
                 wicket_5=df.player_Bowling_5W_T20[x]
                 fill_in_bowling_stats(int(id),int(player_id),int(format_id),int(matches),int(innings),int(balls),float(economy),float(average),int(maidens),int(wickets),int(wicket_4),int(wicket_5))
-            count+=1                            
+            # count+=1                            
         x+=1
 
 def fill_in_batting_stats(id,player_id,format_id,matches,innings,runs,balls_faced,strike_rate,average,ducks,no_50s,no_100s,no_200s,highest_score,not_outs):
@@ -208,7 +208,7 @@ def fill_in_batting_stats(id,player_id,format_id,matches,innings,runs,balls_face
 
 def batting_statistics(df):
     x=0
-    count=1
+    # count=1
 
     for j in df.player_id:   
         player_id=j    
@@ -216,7 +216,7 @@ def batting_statistics(df):
     
         for m in [1,2,3]:
             format_id=m
-            id =count
+            # id =count
             if m==1:
                 matches= df.player_batting_Matches_Test[x]
                 innings=df.player_batting_Inning_Test[x]
@@ -262,7 +262,7 @@ def batting_statistics(df):
                 highest_score=df.player_batting_Highest_T20[x]
                 not_outs=df.player_batting_NotOut_T20[x]
                 fill_in_batting_stats(int(id),int(player_id),int(format_id),int(matches),int(innings),int(runs),int(balls_faced),float(strike_rate),float(average),int(ducks),int(no_50s),int(no_100s),int(no_200s),int(highest_score),int(not_outs))
-            count+=1
+            # count+=1
         x+=1
     
 if __name__ == '__main__':
