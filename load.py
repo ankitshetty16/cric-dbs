@@ -51,47 +51,49 @@ def player_rankings(df,roles):
     x=0
     for j in df.player_id:   
         player_id=j
-        for r in ["bat","bowl"]:
+        # for r in ["bat","bowl"]:
             
-            for m in [1,2,3]:
-                format_id=m
-                for k, v in roles.items():
-                    if df.player_role[x]==v:
-                        role_id=k
-                id=count
-                if r=="bat":
-                    if m==1:
-                        rank=df.player_bat_testrank[x]
-                        if rank:
-                            fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                            count+=1
-                    elif m==2:
-                        rank=df.player_bat_Odirank[x]
-                        if rank:
-                            fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                            count+=1
-                    elif m==3:
-                        rank=df.player_bat_t20rank[x]
-                        if rank:
-                            fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                            count+=1
-                elif r=="bowl":
-                    if m==1:
-                        rank=df.player_bowl_testrank[x]
-                        if rank:
-                            fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                            count+=1
-                    elif m==2:
-                        rank=df.player_bowl_Odirank[x]
-                        if rank:
-                            fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                            count+=1
-                    elif m==3:
-                        rank=df.player_bowl_t20rank[x]
-                        if rank:
-                            fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
-                            count+=1
-                print(count)
+        for m in [1,2,3]:
+            format_id=m
+            for k, v in roles.items():
+                if df.player_role[x]==v:
+                    role_id=k
+            id=count
+            # if r=="bat":
+            if role_id==2 or role_id==1 or role_id==4:
+                if m==1:
+                    rank=df.player_bat_testrank[x]
+                    if rank:
+                        fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
+                        count+=1
+                elif m==2:
+                    rank=df.player_bat_Odirank[x]
+                    if rank:
+                        fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
+                        count+=1
+                elif m==3:
+                    rank=df.player_bat_t20rank[x]
+                    if rank:
+                        fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
+                        count+=1
+            # elif r=="bowl":
+            elif role_id==3 or role_id==5:
+                if m==1:
+                    rank=df.player_bowl_testrank[x]
+                    if rank:
+                        fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
+                        count+=1
+                elif m==2:
+                    rank=df.player_bowl_Odirank[x]
+                    if rank:
+                        fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
+                        count+=1
+                elif m==3:
+                    rank=df.player_bowl_t20rank[x]
+                    if rank:
+                        fill_player_ranking(int(id),int(player_id),int(format_id),int(role_id),int(rank))
+                        count+=1
+            print(count)
         x+=1
         print(x)
 
